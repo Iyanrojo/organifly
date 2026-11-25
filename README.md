@@ -1,32 +1,46 @@
 # Organifly
 
-Organizador personal: tareas, proyectos, calendario, clases, facturas, finanzas, reuniones, sueños y deporte en una sola app limpia, conectada con Google y con IA.
+Organizador personal: tareas, proyectos, calendario, clases, facturas, finanzas, reuniones, sueños y deporte en una sola app limpia, conectada con Google.
 
-## Estado
+## Qué hay
 
-- `index.html` — landing page + maqueta de registro (Google / email → nombre y perfil → módulos → Google Calendar). **Maqueta**: aún no crea cuentas; lo elegido se guarda solo en `localStorage`.
-- La app actual funciona como artefacto privado en Claude. Pasarla aquí requiere sustituir su capa de datos (ver hoja de ruta).
+| Ruta | Qué es |
+|---|---|
+| `index.html` | Landing con la maqueta de registro. Al final del registro lleva a la app. |
+| `app/index.html` | **La app**, volcada desde el artefacto de Claude. Un solo archivo (HTML + CSS + JS). |
+| `app/adapter.js` | Hace que la app funcione fuera de Claude: datos en Firebase (o en el navegador), Google Calendar por su API, descargas. |
+| `app/adapter.css` | Pantalla de acceso, panel de copia de seguridad. |
+| `app/assets/` | Tipografía Montserrat para las facturas en PDF. |
+| `firebase-config.js` | Configuración de Firebase. Vacía = modo prueba. |
+| `firestore.rules` | Reglas: cada persona solo ve lo suyo (`users/{uid}/…`). |
 
-## Ver en local
+## Modos
 
-Es HTML estático, sin dependencias: abre `index.html` en el navegador o sirve la carpeta:
+- **Modo prueba** (mientras `firebase-config.js` esté vacío): sin login; los datos se guardan solo en ese navegador.
+- **Modo real** (con Firebase): entrar con Google es obligatorio; cada persona tiene sus datos en `users/{uid}/…` y Google Calendar se conecta con el mismo inicio de sesión.
 
-```bash
-python3 -m http.server 8080
-```
+## Activar el login con Google (Firebase)
 
-## Despliegue (Cloudflare Pages)
+1. Crea un proyecto en [Firebase](https://console.firebase.google.com) (el plan gratuito basta).
+2. **Authentication → Sign-in method:** activa **Google**.
+3. **Authentication → Settings → Authorized domains:** añade el dominio donde se publica (p. ej. `iyanrojo.github.io` o tu `.com`).
+4. **Firestore Database:** créala en modo producción, región europea (p. ej. `europe-southwest1`, Madrid).
+5. **Firestore → Reglas:** pega `firestore.rules` y publica.
+6. **Configuración del proyecto → Tus apps → App web:** copia el bloque `firebaseConfig` en `firebase-config.js` como `window.ORGANIFLY_FIREBASE = { … }`.
+7. **Google Calendar:** en [Google Cloud Console](https://console.cloud.google.com) (mismo proyecto que Firebase) → *APIs y servicios* → activa **Google Calendar API**. En *Pantalla de consentimiento OAuth* añade el permiso `…/auth/calendar.events`. Mientras la app no esté verificada por Google, añade tu Gmail como usuario de prueba.
 
-1. Cloudflare → Workers & Pages → Create → Pages → *Connect to Git* → `Iyanrojo/organifly`.
-2. Framework preset: **None** · Build command: *(vacío)* · Output directory: `/`.
-3. Custom domains → añadir el dominio comprado (p. ej. `organifly.com`).
+## Pasar tus datos desde Claude
 
-## Hoja de ruta
+En la barra lateral de la app → **Copia de seguridad** → *Importar copia…* y elige el `.json` exportado del artefacto. *Descargar copia* hace lo contrario.
 
-1. **Landing + maqueta de registro** ✅
-2. **Cuentas reales con Google**: Firebase Authentication (proveedor Google) o Supabase Auth.
-3. **Datos por usuario**: Firestore / Supabase con reglas «cada usuario solo lee y escribe lo suyo».
-4. **App** (`/app`): portar la versión del artefacto, cambiando `window.claude.use("db")` por el SDK elegido y sacando de la plantilla de facturas cualquier dato personal (cada usuario configura sus datos fiscales y sus clientes).
-5. **Google Calendar** con OAuth (scope `calendar.events`), solo si el usuario lo activa.
-6. **IA** (actas, ejercicios, etiquetas de sueños) vía una función de servidor (Cloudflare Workers) con la API de Claude, sin exponer claves en el navegador.
-7. Legal: política de privacidad, términos y verificación de la app OAuth de Google.
+## Publicar
+
+- **GitHub Pages:** *Settings → Pages → Deploy from a branch → `main` / root*. Queda en `https://iyanrojo.github.io/organifly/` (la app en `/app/`).
+- **Cloudflare Pages:** *Workers & Pages → Create → Pages → Connect to Git → `Iyanrojo/organifly`*, sin comando de build, carpeta `/`. Después, *Custom domains* para el `.com`.
+
+## Pendiente
+
+- **IA** (actas de reunión, ejercicios, etiquetas de sueños): en Claude usa `sample`; fuera de Claude hace falta una función de servidor (p. ej. Cloudflare Worker con la API de Claude). Mientras tanto la app usa sus alternativas sin IA.
+- **Generalizar para cualquier persona:** algunos módulos aún están pensados para Iyán (proyecto «Nueva Vida», academia «DB5», alumnos online, plantillas de factura). Datos de facturación (`settings/invoicing`: `issuer`, `payers`, `logo`) y equipo (`settings/team.members`) ya se leen de la base de datos.
+- Ajustes dentro de la app para editar datos fiscales, clientes y equipo.
+- Política de privacidad, términos y verificación de la app OAuth de Google.

@@ -1,0 +1,22 @@
+/* Organifly web: acceso, copia de seguridad y enlaces del pie de la barra lateral */
+#of-gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:var(--bg,#fff)}
+.of-gate-card{width:min(400px,100%);display:grid;justify-items:center;gap:14px;text-align:center;font-family:var(--f,system-ui)}
+.of-gate-card h1{margin:0;font-size:32px;font-weight:800;letter-spacing:-.03em;color:var(--ink,#16191D)}
+.of-gate-card h1 span{display:inline-block;transform:translateY(.24em) rotate(3deg);color:var(--brand,#1F8FD6)}
+.of-gate-card p{margin:0;color:var(--muted,#6B727C)}
+#of-gbtn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:14px;border-radius:999px;border:1px solid var(--line,#E6E8EB);background:var(--bg,#fff);color:var(--ink,#16191D);font-weight:700;font-size:15px;cursor:pointer}
+#of-gbtn:hover{background:var(--hover,#ECEEF1)}
+#of-gbtn[disabled]{opacity:.6;cursor:progress}
+.of-err{color:var(--hot,#E0483A)!important;font-size:13px}
+.of-gate-card a{color:var(--muted,#6B727C);font-size:13px}
+.of-modal{position:fixed;inset:0;z-index:90;background:rgba(15,18,22,.45);display:grid;place-items:center;padding:16px}
+.of-card{background:var(--bg,#fff);color:var(--ink,#16191D);border-radius:18px;width:min(440px,100%);padding:22px;display:grid;gap:12px;font-family:var(--f,system-ui)}
+.of-card h2{margin:0;font-size:20px;font-weight:800}
+.of-card p{margin:0;color:var(--muted,#6B727C);font-size:14px}
+.of-btn{display:flex;justify-content:center;padding:11px 14px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;background:var(--ink,#16191D);color:var(--bg,#fff);border:1px solid var(--ink,#16191D)}
+.of-btn.ghost{background:var(--bg,#fff);color:var(--ink,#16191D);border-color:var(--line,#E6E8EB)}
+.of-link{justify-self:center;font-size:13px;color:var(--muted,#6B727C);cursor:pointer}
+.of-msg{min-height:1.2em}
+.of-side-link{display:block;margin:2px 10px 0;font-size:12.5px;color:var(--muted,#6B727C);text-decoration:none;text-align:left;background:none;border:0;padding:4px 0;cursor:pointer}
+.of-side-link:first-of-type{margin-top:auto}
+a.of-side-link:hover,button.of-side-link:hover{color:var(--ink,#16191D)}

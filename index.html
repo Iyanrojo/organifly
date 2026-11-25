@@ -617,9 +617,9 @@ footer a:hover{color:var(--ink)}
       const u = store.get("of-user", null) || {name: st.name || "", email: st.email};
       const nm = (st.step === 9 ? (u.email === st.email ? u.name : "") : st.name) || "";
       frame('<div class="center" style="display:grid;gap:14px"><div class="done-ic">✓</div><h3 id="mTitle">' + (st.step === 9 ? "¡Hola" + (nm ? ", " + esc(nm) : "") + "!" : "¡Todo listo, " + esc(nm) + "!") + '</h3>' +
-        '<p>' + (st.step === 9 ? "En la versión real, aquí se abriría tu Organifly." : "Tu Organifly está preparado con " + st.mods.size + " módulos" + (st.cal ? " y tu calendario conectado" : "") + ". En la versión real, aquí se abriría la app.") + '</p></div>' +
-        '<button class="btn" type="button" id="fin" data-focus style="width:100%">Volver a la web</button>', st.step === 4 ? {progress:4} : {});
-      $("fin").onclick = close;
+        '<p>' + (st.step === 9 ? "Abre la app y entra con tu cuenta de Google." : "Tu Organifly está preparado con " + st.mods.size + " módulos" + (st.cal ? " y tu calendario conectado" : "") + ". Abre la app y entra con tu cuenta de Google.") + '</p></div>' +
+        '<a class="btn" href="app/" id="fin" data-focus style="width:100%">Abrir Organifly</a>', st.step === 4 ? {progress:4} : {});
+      
     }
   }
 })();
